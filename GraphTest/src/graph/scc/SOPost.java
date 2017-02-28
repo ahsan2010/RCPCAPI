@@ -18,9 +18,16 @@ public class SOPost implements Serializable{
 	public String tags;
 	public String parentPostId;
 	public boolean isQuestion;	
+	public double score;
 	
 	
 	
+	public double getScore() {
+		return score;
+	}
+	public void setScore(double score) {
+		this.score = score;
+	}
 	public String getParentPostId() {
 		return parentPostId;
 	}

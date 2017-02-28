@@ -17,10 +17,19 @@ public class UserMap {
 	public Map<Integer,String> numToUser;
 	public Map<String,SOPost>posts;
 	ArrayList<String> users = new ArrayList<String>();
+	
+	Map<String,ArrayList<String>> postAnswerers = new HashMap<String,ArrayList<String>>();
 	Map<String,ArrayList<String>> userAnswers = new HashMap<String,ArrayList<String>>();
 	Map<String,ArrayList<String>> userQuestions = new HashMap<String,ArrayList<String>>();
+	Map<String,ArrayList<String>> answerIdByUser = new HashMap<String,ArrayList<String>>();
 	public int totalUser;
 	String tag;
+	
+	double maxiAnswers;
+	double maxiView;
+	double maxiFav;
+	double maxiComments;
+	
 	
 	public UserMap(String tag){
 		userToNum = new HashMap<String,Integer>();
@@ -38,6 +47,28 @@ public class UserMap {
 			SOPost post = p.getValue();
 			users.add(p.getValue().getUserId());
 			if(!post.isQuestion){
+				
+				if(!postAnswerers.containsKey(post.getParentPostId())){
+					ArrayList<String> uid = new ArrayList<String>();
+					
+					if(posts.containsKey(post.getParentPostId())){
+						
+						uid.add(post.getUserId());
+						postAnswerers.put(post.getParentPostId(),uid);
+						
+					}
+				}else{
+					postAnswerers.get(post.getParentPostId()).add(post.getUserId());
+				}
+				
+				if(!answerIdByUser.containsKey(post.getUserId())){
+					ArrayList<String> aid = new ArrayList<String>();
+					aid.add(post.getPostId());
+					answerIdByUser.put(post.getUserId(), aid);
+				}else{
+					answerIdByUser.get(post.getUserId()).add(post.getPostId());
+				}
+				
 				if(!userAnswers.containsKey(post.getUserId())){
 					ArrayList<String> ansQuesId = new ArrayList<String>();
 					ansQuesId.add(post.getParentPostId());
@@ -46,6 +77,17 @@ public class UserMap {
 					userAnswers.get(post.getUserId()).add(post.getParentPostId());
 				}
 			}else{
+				
+				if(maxiFav < post.getFavoriteCount()){
+					maxiFav = post.getFavoriteCount();
+				}
+				
+				if(maxiAnswers < post.getAnswersCount()){
+					maxiAnswers = post.getAnswersCount();
+				}
+				if(maxiComments < post.getCommentsCount()){
+					maxiComments = post.getCommentsCount();
+				}				
 				
 				if(!userQuestions.containsKey(post.getUserId())){
 					ArrayList<String> askQuesId = new ArrayList<String>();
@@ -56,7 +98,6 @@ public class UserMap {
 				}
 			}
 		}
-		
 		
 	}
 	

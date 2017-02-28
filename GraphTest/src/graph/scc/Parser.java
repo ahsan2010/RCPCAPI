@@ -6,6 +6,8 @@
 package graph.scc;
 
 import java.util.ArrayList;
+
+import javax.xml.XMLConstants;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.SAXException;
@@ -22,7 +24,9 @@ public class Parser {
     public void ParseXml (String tag) throws Exception {			
 				
 		        SAXParserFactory spf = SAXParserFactory.newInstance();
+		        spf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, false);
 		        SAXParser sp = spf.newSAXParser();
+		        
 		        XMLReader xr = sp.getXMLReader();		       
 		        xr.setContentHandler(new PostHandle(xr,tag));		      
 		        try {

@@ -183,13 +183,14 @@ public class PostHandle extends DefaultHandler {
 				String id = atts.getValue("Id");
 				System.out.println(year);
 
-				if (year < 2011 && postTypeId == 1 && checkJava(atts.getValue("Tags"), lang)) {
+				if (postTypeId == 1 && checkJava(atts.getValue("Tags"), lang)) {
 					
 					SOPost p = new SOPost();
 					p.setPostId(id);
 					p.setAccAnswerId(atts.getValue("AcceptedAnswerId"));
 					p.setCommentsCount(atts.getValue("CommentCount"));
 					p.setFavoriteCount(atts.getValue("FavoriteCount"));
+					p.setAnswersCount(atts.getValue("AnswerCount"));
 					p.setTitle(atts.getValue("Title"));
 					p.setCreationDate(atts.getValue("CreationDate"));
 					p.setBody(atts.getValue("Body"));
@@ -287,6 +288,7 @@ public class PostHandle extends DefaultHandler {
 		// writePostInfo();
 		writeObject();
 		// writePostInfo();
+		System.out.println("Complete Post Reading and Writing..");
 		super.endDocument();
 		System.exit(1);
 

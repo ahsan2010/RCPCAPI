@@ -8,6 +8,8 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import cc.mallet.pipe.SourceLocation2TokenSequence;
+
 public class ThirdStep {
 
 	FirstStep step1;
@@ -82,9 +84,17 @@ public class ThirdStep {
 		System.out.println("CL : " + cl);
 		System.out.println("UCL : " + ucl);
 		
-		for(int i = lcl ; i <= ucl ; i ++ ){
+		/*for(int i = lcl ; i <= ucl ; i ++ ){
+			selectedQuestion.add(quesSort.get(i).questionId);
+		}*/
+		
+		for(int i = 0 ; i < lcl ; i ++ ){
 			selectedQuestion.add(quesSort.get(i).questionId);
 		}
+		for(int i = ucl ; i < quesSort.size();  i ++){
+			selectedQuestion.add(quesSort.get(i).questionId);
+		}
+		
 		
 		System.out.println("Total Quseiton After CC : " + selectedQuestion.size());
 		
@@ -94,6 +104,11 @@ public class ThirdStep {
 	public void printSortedQuestion(){
 		for(TempQuestion t : quesSort){
 			System.out.println("ID: " + t.questionId +" "+t.accDate);
+		}
+	}
+	public void printSelectedQuesiton(){
+		for(String id : selectedQuestion){
+			System.out.println(id);
 		}
 	}
 	

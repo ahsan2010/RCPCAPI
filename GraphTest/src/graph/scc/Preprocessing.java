@@ -14,6 +14,7 @@ import org.apache.log4j.chainsaw.Main;
 import org.tartarus.snowball.ext.SnowballStemmer;
 import org.tartarus.snowball.ext.englishStemmer;
 
+
 import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.HTMLElementName;
 import net.htmlparser.jericho.OutputDocument;
@@ -168,6 +169,28 @@ public class Preprocessing {
 		your_steemed_String = rm.doRemove(your_steemed_String);
 		
 		return your_steemed_String;
+	}
+	
+	public static ArrayList<String> readIssueId( String api){
+		ArrayList<String> issueIds = new ArrayList<String>();
+		String path = Properties.root+ "/"+ api+"_issues" ;
+		try{
+			
+			BufferedReader br = new BufferedReader( new FileReader(path));
+			String line = "";
+			while(( line = br.readLine()) != null ){
+				if(line.trim().length() > 1 ){
+					issueIds.add(line.trim());
+				}
+			}
+			
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		
+		return issueIds;
 	}
 
 }

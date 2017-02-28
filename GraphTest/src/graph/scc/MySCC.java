@@ -3,6 +3,7 @@ package graph.scc;
 import java.util.Stack;
 import java.util.Vector;
 
+import cc.mallet.pipe.SourceLocation2TokenSequence;
 import graph.scc.Graph.Neighbour;
 import graph.scc.Graph.Node;
 
@@ -33,6 +34,7 @@ public class MySCC {
 		node.discTime = index;
         node.lowTime = index;
         index++;
+        //System.out.println("Name;" );
         stack.push(node.name);
 		node.visited = true;
 	
