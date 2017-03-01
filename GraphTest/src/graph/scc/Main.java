@@ -11,7 +11,7 @@ public class Main {
 
 	public void RecommndPostApiIssues(){
 		
-		UserMap umap = new UserMap("android");
+		UserMap umap = new UserMap("neo4j");
 		umap.readPost();
 		umap.mineUser();
 		umap.mapPost();
@@ -27,37 +27,44 @@ public class Main {
 		step2.findExpertPosts();
 		step2.dimensionReduction();
 		
+		System.out.println("Finish Step2");
+		
 		ThirdStep step3 = new ThirdStep(step1, step2, umap);
 		step3.quesitonSelection();
 		//step3.printSortedQuestion();
 		step3.doControlChart();
 		//step3.printSelectedQuesiton();
 		//umap.showuserToNum();
+		
+		System.out.println("Finish Step3");
+		
 		ForthStep step4 = new ForthStep(step1, step2, step3, umap);
 		step4.calculateScore();
+		System.out.println("Finish Step4");
+		
 		step4.showTopQuestions();
-		
+		step4.getAccuray();
 		//compareResult(step4);
-		System.out.println(umap.maxiAnswers +" " + umap.maxiComments +" " + umap.maxiFav);
 		
+		System.out.println(umap.maxiAnswers +" " + umap.maxiComments +" " + umap.maxiFav);
+		System.out.println("Complete.");
 	}
 	
 	public void compareResult(ForthStep s){
 		
-		ArrayList<String> postIds = Preprocessing.readIssueId("neo4j");
-		Set<String> ids = new HashSet<String>(postIds);
+		Set<String> postIds = Preprocessing.readIssueId("neo4j");
 		ArrayList<String> selectQuestions = s.getSelectedQuestions();
 		double total = 0;
 		System.out.println("----------------------------------");
 		for(String st : selectQuestions){
 			String temp = st.trim();
-			if(ids.contains(temp)){
+			if(postIds.contains(temp)){
 				total ++ ;
 				System.out.println(temp);
 			}
 		}
 		
-		System.out.println("Total Selected: " + ids.size());
+		System.out.println("Total Selected: " + postIds.size());
 		System.out.println("Total Find: " + total);
 		
 	}

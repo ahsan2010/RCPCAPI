@@ -13,6 +13,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
+
 /**
  *
  * @author root
@@ -36,4 +37,20 @@ public class Parser {
 		        }   
 		      
 	}
+    
+    public void ParseVoteXML() throws Exception{
+		
+    	SAXParserFactory spf = SAXParserFactory.newInstance();
+		spf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, false);
+		SAXParser sp = spf.newSAXParser();
+		XMLReader xr = sp.getXMLReader();
+		
+		try {		
+			xr.setContentHandler(new VoteHandle(xr));
+			xr.parse(Properties.msr_vote_file);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 }

@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class ForthStep {
 
@@ -13,7 +14,10 @@ public class ForthStep {
 	FirstStep step1;
 	UserMap umap;
 	
+	double maxiUpVotes = -1;	
+	double maxiDownVotes = -1;
 	
+	Map<String,Votes> votes = null;
 	Map<String,Double> userResoRate = new HashMap<String,Double>();
 	Map<String,Double> postScore = new HashMap<String,Double>();
 	//Map<String,Double> ps = new HashMap<String,Double>();
@@ -61,9 +65,25 @@ public class ForthStep {
 		}
 	}
 	
+	public void calculateMaxiVotes(Map<String,Votes> votes){
+		
+		for(Map.Entry<String, Votes> v : votes.entrySet()){
+			Votes tempVotes = v.getValue();
+			if(maxiUpVotes < tempVotes.getUpVote()){
+				maxiUpVotes = tempVotes.getUpVote();
+			}
+			else if(maxiDownVotes < tempVotes.getDownVote()){
+				maxiDownVotes = tempVotes.getDownVote();
+			}
+		}
+		
+	}
+	
 	public void calculateScore(){
 		
 		resolutionRate();
+		
+		votes = Preprocessing.loadVotesData();
 		
 		for(String id : step3.selectedQuestion){
 			String uid = umap.posts.get(id).getUserId();
@@ -110,7 +130,15 @@ public class ForthStep {
 			
 			SOPost p  = umap.posts.get(id);
 			
-			pscore = p.getAnswersCount()/umap.maxiAnswers + p.getCommentsCount()/umap.maxiComments + p.getFavoriteCount()/umap.maxiFav;
+			double upVotes = 0.0;
+			double downVotes = 0.0;
+			
+			if(votes.containsKey(p.getPostId())){
+				upVotes = votes.get(p.getPostId()).getUpVote();
+				downVotes = votes.get(p.getPostId()).getDownVote();
+			}
+			
+			pscore = 15*upVotes/maxiUpVotes + 125*downVotes/maxiDownVotes + p.getAnswersCount()/umap.maxiAnswers + 50*p.getCommentsCount()/umap.maxiComments + p.getFavoriteCount()/umap.maxiFav;
 			
 		}
 		
@@ -125,6 +153,21 @@ public class ForthStep {
 			System.out.println(step3.selectedQuestion.get(i) +" " + postScore.get(step3.selectedQuestion.get(i)));
 		}
 		
+	}
+	
+	public void getAccuray(){
+		double  totalSelected = 0;
+		Set<String> issueIds = Preprocessing.readIssueId("neo4j");
+		int size = step3.selectedQuestion.size() < 200 ? step3.selectedQuestion.size() : 200;
+		for(int i = 0 ; i < size ; i ++ ){
+			String postId = step3.selectedQuestion.get(i).trim();
+			if(issueIds.contains(postId)){
+				totalSelected ++ ;
+				System.out.println(postId);
+			}
+		}
+		System.out.println("---------------------------------");
+		System.out.println("Accuracy : " + totalSelected/200 +" " + totalSelected);
 	}
 	
 	public ArrayList<String> getSelectedQuestions(){

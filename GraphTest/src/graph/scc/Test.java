@@ -3,6 +3,7 @@ package graph.scc;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Map;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -10,10 +11,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 public class Test {
 
-	
-	public static void main (String arg[]){
-		
-		
+	public static void dateTest(){
 		String d1 = "2008-12-01 16:08:52";
 		String d2 = "2008-08-01 16:08:52.333";
 		
@@ -48,6 +46,26 @@ public class Test {
 			System.out.println(dtfOut.print(d));
 		}
 		
+		
+	}
+	public static void main (String arg[]){
+		
+		
+		try {
+			//Parser p = new Parser();
+			//p.ParseVoteXML();
+			
+		Map<String,Votes> votes = Preprocessing.loadVotesData();
+		
+		for(Map.Entry<String,Votes> v : votes.entrySet()){
+			System.out.println(v.getValue().getPostId()+" "+v.getValue().getUpVote() +" " + v.getValue().getDownVote());
+		}
+		
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
 		
 		
 	}

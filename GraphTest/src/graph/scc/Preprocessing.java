@@ -1,7 +1,10 @@
 package graph.scc;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -171,8 +174,8 @@ public class Preprocessing {
 		return your_steemed_String;
 	}
 	
-	public static ArrayList<String> readIssueId( String api){
-		ArrayList<String> issueIds = new ArrayList<String>();
+	public static Set<String> readIssueId( String api){
+		Set<String> issueIds = new HashSet<String>();
 		String path = Properties.root+ "/"+ api+"_issues" ;
 		try{
 			
@@ -191,6 +194,45 @@ public class Preprocessing {
 		
 		
 		return issueIds;
+	}
+	
+	public static Map<String, Votes> loadVotesData() {
+
+		Map<String, Votes> votes = new HashMap<String, Votes>();
+		String file_path = Properties.votes_ser_file;
+
+		long start = System.currentTimeMillis();
+
+		FileInputStream input = null;
+		try {
+
+			input = new FileInputStream(file_path);
+			System.out.println("FileReading...");
+
+			ObjectInputStream in2 = new ObjectInputStream(input);
+			System.out.println("Loading.....");
+
+			votes = (Map<String, Votes>) in2.readObject();
+			System.out.println("Finishing.. Reading..");
+			System.out.println("Total Posts: " + votes.size());
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			try {
+				input.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		long end = System.currentTimeMillis();
+
+		System.out.println("[Loading Posts takes: " + (end - start) + " ms]");
+		System.out.println();
+
+		return votes;
+
 	}
 
 }
